@@ -2,10 +2,12 @@ package com.tan.hoangngoc.shoppingapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.tan.hoangngoc.shoppingapp.data.local.ShoppingDao
 import com.tan.hoangngoc.shoppingapp.data.local.ShoppingItemDatabase
 import com.tan.hoangngoc.shoppingapp.data.remote.response.PixabayAPI
 import com.tan.hoangngoc.shoppingapp.other.Constants.BASE_URL
 import com.tan.hoangngoc.shoppingapp.other.Constants.DATABASE_NAME
+import com.tan.hoangngoc.shoppingapp.repository.DefaultShoppingRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +26,13 @@ class AppModule {
     fun provideShoppingItemDatabase(
         @ApplicationContext context: Context
     ) = Room.databaseBuilder(context, ShoppingItemDatabase::class.java, DATABASE_NAME)
+
+    @Singleton
+    @Provides
+    fun provideDefaultShoppingRepository(
+        dao: ShoppingDao,
+        api: PixabayAPI
+    ) = DefaultShoppingRepository(dao, api)
 
     @Singleton
     @Provides

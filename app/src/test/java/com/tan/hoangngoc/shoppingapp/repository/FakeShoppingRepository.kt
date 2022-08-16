@@ -41,7 +41,7 @@ class FakeShoppingRepository : ShoppingRepository {
         return observableShoppingItems
     }
 
-    override suspend fun observeTotalPrice(): LiveData<Float> {
+    override fun observeTotalPrice(): LiveData<Float> {
         return observableTotalPrice
     }
 
