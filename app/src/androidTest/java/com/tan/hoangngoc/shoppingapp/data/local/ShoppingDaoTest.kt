@@ -8,10 +8,7 @@ import androidx.test.filters.SmallTest
 import com.tan.hoangngoc.shoppingapp.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 
 @ExperimentalCoroutinesApi
@@ -19,7 +16,7 @@ import org.junit.runner.RunWith
 @SmallTest
 class ShoppingDaoTest {
     @get:Rule
-    private val instantTaskExecutorRule = InstantTaskExecutorRule()
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var database: ShoppingItemDatabase
     private lateinit var dao: ShoppingDao
@@ -46,5 +43,40 @@ class ShoppingDaoTest {
         val allShoppingItems = dao.observeAllShoppingItems().getOrAwaitValue()
 
         assert(allShoppingItems.contains(shoppingItem))
+    }
+
+    @Test
+    fun deleteShoppingItem() = runBlocking {
+        val shoppingItem = ShoppingItem("Banana", 1, 2.0f, "", 1)
+        dao.insertShoppingItem(shoppingItem)
+        dao.deleteShoppingItem(shoppingItem)
+
+        val allShoppingItems = dao.observeAllShoppingItems().getOrAwaitValue()
+
+        assert(!allShoppingItems.contains(shoppingItem))
+    }
+
+    @Test
+    fun observeAllShoppingItems() = runBlocking {
+        val shoppingItem1 = ShoppingItem("Banana", 1, 2.0f, "", 1)
+        val shoppingItem2 = ShoppingItem("Apple", 1, 3.0f, "", 2)
+        dao.insertShoppingItem(shoppingItem1)
+        dao.insertShoppingItem(shoppingItem2)
+
+        val allShoppingItems = dao.observeAllShoppingItems().getOrAwaitValue()
+
+        assert(allShoppingItems.size == 2)
+    }
+
+    @Test
+    fun observeTotalPrice() = runBlocking {
+        val shoppingItem1 = ShoppingItem("Banana", 1, 2.0f, "", 1)
+        val shoppingItem2 = ShoppingItem("Apple", 1, 3.0f, "", 2)
+        dao.insertShoppingItem(shoppingItem1)
+        dao.insertShoppingItem(shoppingItem2)
+
+        val totalPrice = dao.observeTotalPrice().getOrAwaitValue()
+
+        Assert.assertEquals(5.0f, totalPrice)
     }
 }
