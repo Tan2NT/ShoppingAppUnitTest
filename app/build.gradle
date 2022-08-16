@@ -16,7 +16,7 @@ android {
 
         buildConfigField 'String', 'API_KEY', API_KEY
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.tan.hoangngoc.shoppingapp.HiltTestRunner"
     }
 
     buildTypes {
@@ -126,4 +126,10 @@ dependencies {
     // dependency to appear on your APK"s compile classpath or the test APK
     // classpath.
     androidTestImplementation( "androidx.test.espresso:espresso-idling-resource:$espressoVersion")
+
+    androidTestImplementation("org.mockito:mockito-core:2.19.0")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.37")
+    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.37'
+    kapt "com.google.dagger:hilt-android-compiler:2.37"
+    debugImplementation "androidx.fragment:fragment-testing:1.5.2"
 }
